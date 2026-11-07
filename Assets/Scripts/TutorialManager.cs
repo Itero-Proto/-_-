@@ -16,11 +16,20 @@ public class TutorialManager : MonoBehaviour
 
     [Header("Tutorial Messages")]
     [TextArea(3, 5)]
-    [SerializeField] private string[] messages;
+    [SerializeField] private string[] russianMessages;
+
+    [TextArea(3, 5)]
+    [SerializeField] private string[] englishMessages;
 
     private int currentMessageIndex;
     private bool waitingForParry;
     private bool tutorialFinished;
+
+    private bool IsEnglish =>
+        LanguageSettings.CurrentLanguage == GameLanguage.English;
+
+    private string[] CurrentMessages =>
+        IsEnglish ? englishMessages : russianMessages;
 
     private void Start()
     {
@@ -32,6 +41,8 @@ public class TutorialManager : MonoBehaviour
     {
         if (playerParry != null)
             playerParry.OnSuccessfulParry += HandleSuccessfulParry;
+
+        LanguageSettings.OnLanguageChanged += UpdateCurrentMessage;
     }
 
     private void OnDisable()
@@ -41,15 +52,22 @@ public class TutorialManager : MonoBehaviour
 
         if (tutorialCamera != null)
             tutorialCamera.OnFirstAttackStarted -= HandleFirstAttackStarted;
+
+        LanguageSettings.OnLanguageChanged -= UpdateCurrentMessage;
     }
 
     private void ShowMessage()
     {
+        string[] messages = CurrentMessages;
+
         if (messages == null || messages.Length == 0)
         {
             EndTutorial();
             return;
         }
+
+        currentMessageIndex = Mathf.Clamp(
+            currentMessageIndex, 0, messages.Length - 1);
 
         tutorialPanel.SetActive(true);
         nextButton.gameObject.SetActive(true);
@@ -58,11 +76,11 @@ public class TutorialManager : MonoBehaviour
 
         if (currentMessageIndex == messages.Length - 1)
         {
-            SetButtonAction(EndTutorial, "Начать!");
+            SetButtonAction(EndTutorial, IsEnglish ? "Start!" : "Начать!");
         }
         else
         {
-            SetButtonAction(NextMessage, "Далее");
+            SetButtonAction(NextMessage, IsEnglish ? "Next" : "Далее");
         }
     }
 
@@ -80,7 +98,7 @@ public class TutorialManager : MonoBehaviour
     {
         currentMessageIndex++;
 
-        if (currentMessageIndex >= messages.Length)
+        if (currentMessageIndex >= CurrentMessages.Length)
         {
             EndTutorial();
             return;
@@ -102,8 +120,6 @@ public class TutorialManager : MonoBehaviour
             tutorialCamera.OnFirstAttackStarted += HandleFirstAttackStarted;
             tutorialCamera.ActivateCamera();
         }
-
-        Debug.Log("Вводная часть туториала завершена!");
     }
 
     private void HandleFirstAttackStarted()
@@ -122,8 +138,9 @@ public class TutorialManager : MonoBehaviour
 
         tutorialPanel.SetActive(true);
 
-        tutorialText.text =
-            "Камера готовится стрелять!\n\nНажми SPACE, чтобы парировать лазер.";
+        tutorialText.text = IsEnglish
+            ? "The camera is preparing to shoot!\n\nPress SPACE to parry the laser."
+            : "Камера готовится стрелять!\n\nНажми SPACE, чтобы парировать лазер.";
 
         nextButton.gameObject.SetActive(false);
     }
@@ -136,19 +153,49 @@ public class TutorialManager : MonoBehaviour
         waitingForParry = false;
 
         tutorialPanel.SetActive(true);
-        tutorialText.text =
-            "Отлично! Ты отразил лазер!\n\nТеперь отражённый лазер может уничтожить камеру.";
 
-        SetButtonAction(ContinueAfterParry, "Далее");
+        tutorialText.text = IsEnglish
+            ? "Great! You reflected the laser!\n\nNow the reflected laser can destroy the camera."
+            : "Отлично! Ты отразил лазер!\n\nТеперь отражённый лазер может уничтожить камеру.";
 
-        Debug.Log("Туториал: успешное парирование!");
+        SetButtonAction(ContinueAfterParry, IsEnglish ? "Next" : "Далее");
+
+        Debug.Log(IsEnglish
+            ? "Tutorial: successful parry!"
+            : "Туториал: успешное парирование!");
     }
 
     private void ContinueAfterParry()
     {
         tutorialPanel.SetActive(false);
 
-        Debug.Log("Туториал: переходим к следующему уроку.");
+        Debug.Log(IsEnglish
+            ? "Tutorial: moving to the next lesson."
+            : "Туториал: переходим к следующему уроку.");
+    }
+
+    private void UpdateCurrentMessage()
+    {
+        if (!tutorialPanel.activeSelf)
+            return;
+
+        if (!tutorialFinished)
+        {
+            ShowMessage();
+            return;
+        }
+
+        if (waitingForParry)
+        {
+            StartParryLesson();
+            return;
+        }
+
+        tutorialText.text = IsEnglish
+            ? "Great! You reflected the laser!\n\nNow the reflected laser can destroy the camera."
+            : "Отлично! Ты отразил лазер!\n\nТеперь отражённый лазер может уничтожить камеру.";
+
+        SetButtonAction(ContinueAfterParry, IsEnglish ? "Next" : "Далее");
     }
 
     private void OnDestroy()

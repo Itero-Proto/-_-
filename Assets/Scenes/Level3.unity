@@ -2693,7 +2693,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1773982074}
+  - {fileID: 1698717940}
   - {fileID: 1828475547}
   m_Father: {fileID: 1250101970}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2796,6 +2796,7 @@ GameObject:
   - component: {fileID: 854778508}
   - component: {fileID: 854778510}
   - component: {fileID: 854778509}
+  - component: {fileID: 854778511}
   m_Layer: 5
   m_Name: TitleText
   m_TagString: Untagged
@@ -2922,6 +2923,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 854778507}
   m_CullTransparentMesh: 1
+--- !u!114 &854778511
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 854778507}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a051d229c96c6640afdcd90872a813d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LocalizedText
+  russianText: "\u0423\u0420\u041E\u0412\u0415\u041D\u042C \u041F\u0420\u041E\u0419\u0414\u0415\u041D!"
+  englishText: THE LEVEL IS PASSED!
 --- !u!1 &943441238
 GameObject:
   m_ObjectHideFlags: 0
@@ -5556,7 +5571,7 @@ RectTransform:
   m_AnchoredPosition: {x: 2.5, y: 0}
   m_SizeDelta: {x: -5, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!1 &1773982073
+--- !u!1 &1698717939
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5564,9 +5579,10 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1773982074}
-  - component: {fileID: 1773982076}
-  - component: {fileID: 1773982075}
+  - component: {fileID: 1698717940}
+  - component: {fileID: 1698717943}
+  - component: {fileID: 1698717942}
+  - component: {fileID: 1698717941}
   m_Layer: 5
   m_Name: YOU DIED_text
   m_TagString: Untagged
@@ -5574,32 +5590,46 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &1773982074
+--- !u!224 &1698717940
 RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1773982073}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_GameObject: {fileID: 1698717939}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 4.6488, y: 4.6488, z: 4.6488}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 788943849}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 200, y: 50}
+  m_AnchoredPosition: {x: 111, y: 93}
+  m_SizeDelta: {x: 1920, y: 606.1199}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1773982075
+--- !u!114 &1698717941
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1773982073}
+  m_GameObject: {fileID: 1698717939}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a051d229c96c6640afdcd90872a813d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LocalizedText
+  russianText: "\u041A\u0430\u043C\u0435\u0440\u0430 \u0437\u0430\u0441\u0435\u043A\u043B\u0430 \u0442\u0435\u0431\u044F! \u0421\u043E\u0441\u0435\u0434 \u043D\u0435\u0434\u043E\u043B\u0433\u043E \u0434\u0443\u043C\u0430\u044F \u0441\u0445\u0432\u0430\u0442\u0438\u043B \u043E\u0440\u0443\u0436\u0438\u0435 \u0438 \u043E\u0442\u043F\u0440\u0430\u0432\u0438\u043B \u0442\u0435\u0431\u0435 \u043F\u0440\u0438\u0432\u0435\u0442\u0441\u0442\u0432\u0435\u043D\u043D\u044B\u0439 \u0432\u044B\u0441\u0442\u0440\u0435\u043B."
+  englishText: The camera has spotted you!  The neighbor grabbed the gun without thinking twice and sent you a welcome shot.
+--- !u!114 &1698717942
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1698717939}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
@@ -5613,7 +5643,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: YOU DIED
+  m_text: "\u041A\u0430\u043C\u0435\u0440\u0430 \u0437\u0430\u0441\u0435\u043A\u043B\u0430 \u0442\u0435\u0431\u044F!\n\n\u0421\u043E\u0441\u0435\u0434 \u043D\u0435\u0434\u043E\u043B\u0433\u043E \u0434\u0443\u043C\u0430\u044F \u0441\u0445\u0432\u0430\u0442\u0438\u043B \u043E\u0440\u0443\u0436\u0438\u0435 \u0438 \u043E\u0442\u043F\u0440\u0430\u0432\u0438\u043B \u0442\u0435\u0431\u0435 \u043F\u0440\u0438\u0432\u0435\u0442\u0441\u0442\u0432\u0435\u043D\u043D\u044B\u0439 \u0432\u044B\u0441\u0442\u0440\u0435\u043B."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -5640,8 +5670,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 55
+  m_fontSizeBase: 55
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -5679,19 +5709,19 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 0, y: 0, z: 204.63062, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!222 &1773982076
+--- !u!222 &1698717943
 CanvasRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1773982073}
+  m_GameObject: {fileID: 1698717939}
   m_CullTransparentMesh: 1
 --- !u!1 &1778375873
 GameObject:

@@ -38,7 +38,7 @@ public class MainMenuManager : MonoBehaviour
 
     [SerializeField] private string secretLevelSceneName = "SecretLevel";
 
-    private string[] levelNames =
+    private string[] russianLevelNames =
     {
         "1. Обучение",
         "2. Две камеры",
@@ -46,6 +46,18 @@ public class MainMenuManager : MonoBehaviour
         "4. Сложный уровень",
         "5. Финал"
     };
+
+    private string[] englishLevelNames =
+    {
+        "1. Tutorial",
+        "2. Two Cameras",
+        "3. Three Cameras",
+        "4. Hard Level",
+        "5. Final Level"
+    };
+
+    private bool IsEnglish =>
+        LanguageSettings.CurrentLanguage == GameLanguage.English;
 
     private void Start()
     {
@@ -90,7 +102,7 @@ public class MainMenuManager : MonoBehaviour
 
     public void QuitGame()
     {
-        Debug.Log("Выход из игры");
+        Debug.Log(IsEnglish ? "Exit game" : "Выход из игры");
         Application.Quit();
     }
 
@@ -168,14 +180,20 @@ public class MainMenuManager : MonoBehaviour
             {
                 string rank = GameProgress.GetBestRank(levelNumber);
 
-                string status = unlocked ? "" : " — ЗАКРЫТ";
+                string levelName = IsEnglish
+                    ? englishLevelNames[i]
+                    : russianLevelNames[i];
+
+                string status = unlocked
+                    ? ""
+                    : IsEnglish ? " — LOCKED" : " — ЗАКРЫТ";
 
                 string rankText = rank == "—"
-                    ? " — НЕ ПРОЙДЕН"
-                    : " — РАНГ: " + rank;
+                    ? IsEnglish ? " — NOT COMPLETED" : " — НЕ ПРОЙДЕН"
+                    : IsEnglish ? " — RANK: " + rank : " — РАНГ: " + rank;
 
                 levelButtonTexts[i].text =
-                    levelNames[i] + (unlocked ? rankText : status);
+                    levelName + (unlocked ? rankText : status);
             }
         }
 
@@ -187,8 +205,12 @@ public class MainMenuManager : MonoBehaviour
         if (secretLevelButtonText != null)
         {
             secretLevelButtonText.text = secretUnlocked
-                ? "СЕКРЕТНЫЙ УРОВЕНЬ — ДОСТУПЕН"
-                : "СЕКРЕТНЫЙ УРОВЕНЬ — ЗАКРЫТ";
+                ? IsEnglish
+                    ? "SECRET LEVEL — AVAILABLE"
+                    : "СЕКРЕТНЫЙ УРОВЕНЬ — ДОСТУПЕН"
+                : IsEnglish
+                    ? "SECRET LEVEL — LOCKED"
+                    : "СЕКРЕТНЫЙ УРОВЕНЬ — ЗАКРЫТ";
         }
     }
 

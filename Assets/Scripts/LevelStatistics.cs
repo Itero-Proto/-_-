@@ -2,10 +2,12 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
+
 public class LevelStatistics : MonoBehaviour
 {
     [Header("Level Navigation")]
     [SerializeField] private string nextSceneName = "Level2";
+
     public static LevelStatistics Instance;
 
     [Header("Parry Statistics")]
@@ -15,8 +17,10 @@ public class LevelStatistics : MonoBehaviour
 
     [Header("Combat Statistics")]
     public int damageTaken;
+
     [Header("Level Progress")]
     [SerializeField] private int levelNumber = 1;
+
     [Header("Results UI")]
     [SerializeField] private GameObject resultPanel;
     [SerializeField] private TMP_Text rankText;
@@ -26,6 +30,9 @@ public class LevelStatistics : MonoBehaviour
     [SerializeField] private TMP_Text damageTakenText;
 
     private bool levelFinished;
+
+    private bool IsEnglish =>
+        LanguageSettings.CurrentLanguage == GameLanguage.English;
 
     private void Awake()
     {
@@ -75,11 +82,11 @@ public class LevelStatistics : MonoBehaviour
         if (resultPanel != null)
             resultPanel.SetActive(true);
 
-        Debug.Log("===== СТАТИСТИКА УРОВНЯ =====");
-        Debug.Log("Идеальные парирования: " + perfectParries);
-        Debug.Log("Обычные парирования: " + normalParries);
-        Debug.Log("Неудачные попытки: " + failedParries);
-        Debug.Log("Получено попаданий: " + damageTaken);
+        Debug.Log("===== LEVEL STATISTICS =====");
+        Debug.Log("Perfect parries: " + perfectParries);
+        Debug.Log("Normal parries: " + normalParries);
+        Debug.Log("Failed attempts: " + failedParries);
+        Debug.Log("Damage taken: " + damageTaken);
 
         Time.timeScale = 0f;
     }
@@ -87,46 +94,54 @@ public class LevelStatistics : MonoBehaviour
     private void UpdateResultsUI()
     {
         if (perfectParriesText != null)
-            perfectParriesText.text = "Идеальные парирования: " + perfectParries;
+            perfectParriesText.text = IsEnglish
+                ? "Perfect parries: " + perfectParries
+                : "Идеальные парирования: " + perfectParries;
 
         if (normalParriesText != null)
-            normalParriesText.text = "Обычные парирования: " + normalParries;
+            normalParriesText.text = IsEnglish
+                ? "Normal parries: " + normalParries
+                : "Обычные парирования: " + normalParries;
 
         if (failedParriesText != null)
-            failedParriesText.text = "Неудачные попытки: " + failedParries;
+            failedParriesText.text = IsEnglish
+                ? "Failed attempts: " + failedParries
+                : "Неудачные попытки: " + failedParries;
 
         if (damageTakenText != null)
-            damageTakenText.text = "Получено урона: " + damageTaken;
+            damageTakenText.text = IsEnglish
+                ? "Damage taken: " + damageTaken
+                : "Получено урона: " + damageTaken;
 
         if (rankText != null)
-            rankText.text = "РАНГ: " + CalculateRank();
+            rankText.text = IsEnglish
+                ? "RANK: " + CalculateRank()
+                : "РАНГ: " + CalculateRank();
     }
 
     private string CalculateRank()
     {
-        int totalAttempts = perfectParries + normalParries + failedParries;
+        int totalAttempts =
+            perfectParries + normalParries + failedParries;
 
         if (totalAttempts == 0)
             return "C";
 
-        // S — все парирования идеальные и игрок не получил урона
         if (perfectParries == totalAttempts && damageTaken == 0)
             return "S";
 
-        // A — отличное прохождение
         float successRate =
             (float)(perfectParries + normalParries) / totalAttempts * 100f;
 
         if (successRate >= 80f && damageTaken <= 1)
             return "A";
 
-        // B — хорошее прохождение
         if (successRate >= 60f && damageTaken <= 2)
             return "B";
 
-        // C — прохождение с ошибками
         return "C";
     }
+
     public void LoadNextLevel()
     {
         Time.timeScale = 1f;
