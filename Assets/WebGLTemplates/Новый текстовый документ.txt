@@ -1,0 +1,33 @@
+Features:
+
+Scales canvas to fit the window horizontally + vertically while maintaining aspect ratio (can be disabled)
+Centers canvas in window
+Customizable background
+Basic loading bar (2020.2 and higher only - please comment if you need this added to earlier versions)
+To use:
+
+Download and unzip
+Copy the "WebGLTemplates" folder into your project's "Assets" folder
+File -> Build Settings... -> WebGL -> Player Settings... -> Select the "BetterMinimal" template
+(Optional) Customize settings
+Enter colour in the "Background" field
+Enter "false" in the "Scale to fit" field to disable scaling
+Enter "true" in the "Optimize for pixel art" field to use CSS more appropriate for pixel art
+Ideal for embedding on sites like itch.io which provide an external full-screen button.
+----------------------------------------------------
+Минимальный шаблон сборки WebGL.
+
+Характеристики:
+
+Масштабирует холст по горизонтали и вертикали, сохраняя соотношение сторон (можно отключить)
+Центрирует холст в окне
+Настраиваемый фон
+
+Скачайте и распакуйте архив
+Скопируйте папку «WebGLTemplates» в папку «Assets» вашего проекта
+Файл -> Настройки сборки... -> WebGL -> Настройки плеера... -> Выберите шаблон «BetterMinimal»
+(Необязательно) Настройка параметров
+Введите цвет в поле «Фон»
+Введите «false» в поле «Масштабировать по размеру», чтобы отключить масштабирование
+Введите «true» в поле «Оптимизировать для пиксель-арта», чтобы использовать CSS, более подходящий для пиксель-арта
+Идеально подходит для встраивания на такие сайты, как itch.io, где есть внешняя полноэкранная кнопка.
