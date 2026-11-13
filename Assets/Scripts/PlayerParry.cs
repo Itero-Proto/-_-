@@ -15,7 +15,9 @@ public class PlayerParry : MonoBehaviour
 
     [Header("Effects")]
     [SerializeField] private ParryEffect parryEffectPrefab;
-
+    [Header("Parry Effects")]
+    [SerializeField] private ParryEffect normalParryEffectPrefab;
+    [SerializeField] private ParryEffect perfectParryEffectPrefab;
     [Header("Audio")]
     [SerializeField] private AudioSource audioSource;
 
@@ -53,8 +55,18 @@ public class PlayerParry : MonoBehaviour
 
     private void Update()
     {
-        if (Keyboard.current != null &&
-            Keyboard.current.spaceKey.wasPressedThisFrame)
+        // Управление с клавиатуры.
+        bool spacePressed =
+            Keyboard.current != null &&
+            Keyboard.current.spaceKey.wasPressedThisFrame;
+
+        // Управление касанием экрана телефона.
+        bool screenTouched =
+            Touchscreen.current != null &&
+            Touchscreen.current.primaryTouch.press.wasPressedThisFrame;
+
+        // Парирование при любом из этих действий.
+        if (spacePressed || screenTouched)
         {
             StartParry();
         }
@@ -72,11 +84,7 @@ public class PlayerParry : MonoBehaviour
                 {
                     if (LevelStatistics.Instance != null)
                         LevelStatistics.Instance.RecordFailedParry();
-
-                    Debug.Log("Неудачная попытка парирования!");
                 }
-
-                Debug.Log("Парирование закончилось");
             }
         }
     }
@@ -88,7 +96,6 @@ public class PlayerParry : MonoBehaviour
 
         if (stamina == null || !stamina.TrySpend(staminaCost))
         {
-            Debug.Log("Нельзя парировать!");
             return;
         }
 
@@ -103,17 +110,6 @@ public class PlayerParry : MonoBehaviour
 
         parryTimer = parryDuration;
         perfectTimer = perfectParryDuration;
-
-        if (parryEffectPrefab != null)
-        {
-            Instantiate(
-                parryEffectPrefab,
-                transform.position,
-                Quaternion.identity
-            );
-        }
-
-        Debug.Log("ПАРИРОВАНИЕ!");
     }
 
     public void SuccessfulParry(bool isPerfect)
@@ -122,7 +118,19 @@ public class PlayerParry : MonoBehaviour
             return;
 
         parrySucceeded = true;
+        // Выбираем эффект в зависимости от типа парирования.
+        ParryEffect selectedEffect = isPerfect
+            ? perfectParryEffectPrefab
+            : normalParryEffectPrefab;
 
+        if (selectedEffect != null)
+        {
+            Instantiate(
+                selectedEffect,
+                transform.position,
+                Quaternion.identity
+            );
+        }
         OnSuccessfulParry?.Invoke(isPerfect);
 
         if (stamina != null)
@@ -152,8 +160,6 @@ public class PlayerParry : MonoBehaviour
 
             if (audioSource != null && perfectParrySound != null)
                 audioSource.PlayOneShot(perfectParrySound, perfectVolume);
-
-            Debug.Log("PERFECT PARRY!");
         }
         else
         {
@@ -162,8 +168,6 @@ public class PlayerParry : MonoBehaviour
 
             if (audioSource != null && normalParrySound != null)
                 audioSource.PlayOneShot(normalParrySound, normalVolume);
-
-            Debug.Log("NORMAL PARRY!");
         }
     }
 }

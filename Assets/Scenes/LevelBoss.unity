@@ -859,6 +859,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SecurityCamera
   laserSpeed: 7
+  audioSource: {fileID: 230462590}
+  chargeSound: {fileID: 8300000, guid: 130ba0be4caa64b4ea89be43a267437f, type: 3}
+  shotSound: {fileID: 8300000, guid: 98e217a397e1be14ba63dfd4381f41ee, type: 3}
+  chargeVolume: 0.8
+  shotVolume: 0.8
   startOnAwake: 1
   player: {fileID: 709571598}
   laserPrefab: {fileID: 5001703019719453643, guid: 24acacca3a2d4e746813bba0b4621963, type: 3}
@@ -2348,6 +2353,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SecurityCamera
   laserSpeed: 7
+  audioSource: {fileID: 640706787}
+  chargeSound: {fileID: 8300000, guid: f5f4cd58ca1552740b21a72fc080bc5c, type: 3}
+  shotSound: {fileID: 8300000, guid: 8586b2511c5ae3342b41307f666e004d, type: 3}
+  chargeVolume: 0.8
+  shotVolume: 0.8
   startOnAwake: 1
   player: {fileID: 709571598}
   laserPrefab: {fileID: 5001703019719453643, guid: 24acacca3a2d4e746813bba0b4621963, type: 3}
@@ -3035,6 +3045,8 @@ MonoBehaviour:
   perfectParryDuration: 0.1
   staminaCost: 30
   parryEffectPrefab: {fileID: 754308702497336429, guid: 69b48d4ec3b5e904c9fb3469c807ed1f, type: 3}
+  normalParryEffectPrefab: {fileID: 754308702497336429, guid: 69b48d4ec3b5e904c9fb3469c807ed1f, type: 3}
+  perfectParryEffectPrefab: {fileID: 754308702497336429, guid: 393ef70398589a94bbf9b6bef21b362a, type: 3}
   audioSource: {fileID: 709571606}
   parrySwingSound: {fileID: 8300000, guid: dd75b559646042d4ab2762201f0383c2, type: 3}
   normalParrySound: {fileID: 8300000, guid: 2e341758624d23046aa4cef69291fc46, type: 3}
@@ -6323,6 +6335,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SecurityCamera
   laserSpeed: 7
+  audioSource: {fileID: 1778375882}
+  chargeSound: {fileID: 8300000, guid: 7891b372bf04489408c88b92a80ab372, type: 3}
+  shotSound: {fileID: 8300000, guid: a5511f8fa14f2334c9fc0832eb360d78, type: 3}
+  chargeVolume: 0.8
+  shotVolume: 1
   startOnAwake: 1
   player: {fileID: 709571598}
   laserPrefab: {fileID: 5001703019719453643, guid: 24acacca3a2d4e746813bba0b4621963, type: 3}
@@ -6664,6 +6681,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SecurityCamera
   laserSpeed: 7
+  audioSource: {fileID: 1901636504}
+  chargeSound: {fileID: 8300000, guid: f5f4cd58ca1552740b21a72fc080bc5c, type: 3}
+  shotSound: {fileID: 8300000, guid: 8586b2511c5ae3342b41307f666e004d, type: 3}
+  chargeVolume: 0.8
+  shotVolume: 0.8
   startOnAwake: 1
   player: {fileID: 709571598}
   laserPrefab: {fileID: 5001703019719453643, guid: 24acacca3a2d4e746813bba0b4621963, type: 3}
@@ -7272,6 +7294,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SecurityCamera
   laserSpeed: 7
+  audioSource: {fileID: 2013304973}
+  chargeSound: {fileID: 8300000, guid: 130ba0be4caa64b4ea89be43a267437f, type: 3}
+  shotSound: {fileID: 8300000, guid: 98e217a397e1be14ba63dfd4381f41ee, type: 3}
+  chargeVolume: 0.8
+  shotVolume: 0.8
   startOnAwake: 1
   player: {fileID: 709571598}
   laserPrefab: {fileID: 5001703019719453643, guid: 24acacca3a2d4e746813bba0b4621963, type: 3}

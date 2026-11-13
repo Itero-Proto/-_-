@@ -21,6 +21,15 @@ public class FarmOwnerController : MonoBehaviour
     [SerializeField] private float returnDuration = 0.12f;
 
     [SerializeField] private float recoilShake = 2f;
+    [Header("Shotgun Hit Reaction")]
+    [SerializeField] private float hitShakeDistance = 0.12f;
+    [SerializeField] private float hitShakeDuration = 0.12f;
+    [SerializeField] private float hitReturnDuration = 0.1f;
+    [Header("Shotgun Defeat Animation")]
+    [SerializeField] private float shotgunFlyDistance = 7f;
+    [SerializeField] private float shotgunFlyDuration = 1.2f;
+    [SerializeField] private float minSpinTurns = 3f;
+    [SerializeField] private float maxSpinTurns = 5f;
 
     [Header("Attack Timing")]
     [SerializeField] private float minFirstShotDelay = 2f;
@@ -48,6 +57,7 @@ public class FarmOwnerController : MonoBehaviour
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip shootSound;
     [SerializeField] private AudioClip hitSound;
+    [SerializeField] private AudioClip deathSound;
 
     [Range(0f, 1f)]
     [SerializeField] private float shootVolume = 1f;
@@ -198,35 +208,35 @@ public class FarmOwnerController : MonoBehaviour
             Debug.Log("Игрок получил попадание!");
         }
     }
-
     public void TakeDamage()
     {
         if (isDefeated)
             return;
 
         currentHealth--;
+
         PlayHitSound();
+
         if (currentHealth < 0)
             currentHealth = 0;
 
         if (damageEffects != null)
             damageEffects.PlayHit();
 
-        Debug.Log(
-            "Хозяин фермы получил урон! Осталось HP: " + currentHealth
-        );
+        // Ружьё дёргается от попадания.
+        PlayShotgunHitReaction();
 
         if (currentHealth <= 0)
             DefeatOwner();
     }
-
     private void DefeatOwner()
     {
         if (isDefeated)
             return;
 
         isDefeated = true;
-
+        PlayDeathSound();
+        // Останавливаем атаки и отдачу.
         StopAllCoroutines();
 
         if (damageEffects != null)
@@ -237,6 +247,10 @@ public class FarmOwnerController : MonoBehaviour
 
         foreach (Collider2D col in colliders)
             col.enabled = false;
+
+        // Отправляем ружьё в полёт.
+        if (shotgunTransform != null)
+            StartCoroutine(ShotgunFlyAwayRoutine());
 
         Debug.Log("ХОЗЯИН ФЕРМЫ ПОБЕЖДЁН!");
 
@@ -262,7 +276,82 @@ public class FarmOwnerController : MonoBehaviour
 
         audioSource.PlayOneShot(shootSound, shootVolume);
     }
+    private void PlayDeathSound()
+    {
+        if (audioSource == null || deathSound == null)
+            return;
 
+        audioSource.pitch = 1f;
+        audioSource.PlayOneShot(deathSound, 0.9f);
+    }
+    private void PlayShotgunHitReaction()
+    {
+        if (shotgunTransform == null || isDefeated)
+            return;
+
+        // Останавливаем предыдущую реакцию.
+        if (recoilCoroutine != null)
+            StopCoroutine(recoilCoroutine);
+
+        recoilCoroutine = StartCoroutine(ShotgunHitReactionRoutine());
+    }
+
+    private IEnumerator ShotgunHitReactionRoutine()
+    {
+        Vector3 startPosition = shotgunStartPosition;
+
+        // Случайное направление рывка.
+        Vector2 randomDirection = Random.insideUnitCircle.normalized;
+
+        Vector3 shakePosition =
+            startPosition + new Vector3(
+                randomDirection.x,
+                randomDirection.y,
+                0f
+            ) * hitShakeDistance;
+
+        // Резкий рывок.
+        float timer = 0f;
+
+        while (timer < hitShakeDuration)
+        {
+            timer += Time.deltaTime;
+
+            float progress = Mathf.Clamp01(timer / hitShakeDuration);
+
+            shotgunTransform.localPosition = Vector3.Lerp(
+                startPosition,
+                shakePosition,
+                progress
+            );
+
+            yield return null;
+        }
+
+        // Плавное возвращение.
+        timer = 0f;
+
+        while (timer < hitReturnDuration)
+        {
+            timer += Time.deltaTime;
+
+            float progress = Mathf.Clamp01(timer / hitReturnDuration);
+
+            float curve = 1f - Mathf.Pow(1f - progress, 3f);
+
+            shotgunTransform.localPosition = Vector3.Lerp(
+                shakePosition,
+                startPosition,
+                curve
+            );
+
+            yield return null;
+        }
+
+        shotgunTransform.localPosition = startPosition;
+
+        recoilCoroutine = null;
+    }
     private void PlayHitSound()
     {
         if (audioSource == null || hitSound == null)
@@ -337,5 +426,61 @@ public class FarmOwnerController : MonoBehaviour
         shotgunTransform.localPosition = startPosition;
 
         recoilCoroutine = null;
+    }
+    private IEnumerator ShotgunFlyAwayRoutine()
+    {
+        Vector3 startPosition = shotgunTransform.position;
+        Quaternion startRotation = shotgunTransform.rotation;
+
+        // Выбираем случайное направление.
+        Vector2 randomDirection = Random.insideUnitCircle.normalized;
+
+        Vector3 flyDirection = new Vector3(
+            randomDirection.x,
+            randomDirection.y,
+            0f
+        );
+
+        // Случайное количество оборотов и направление вращения.
+        float spinTurns = Random.Range(minSpinTurns, maxSpinTurns);
+
+        float spinDirection = Random.value < 0.5f ? -1f : 1f;
+
+        float timer = 0f;
+
+        while (timer < shotgunFlyDuration)
+        {
+            timer += Time.deltaTime;
+
+            float progress = Mathf.Clamp01(
+                timer / shotgunFlyDuration
+            );
+
+            // Постепенно ускоряем полёт.
+            float movementProgress = progress * progress;
+
+            shotgunTransform.position =
+                startPosition +
+                flyDirection * shotgunFlyDistance * movementProgress;
+
+            // Вращаем ружьё.
+            float rotation = spinDirection * spinTurns * 360f * progress;
+
+            shotgunTransform.rotation =
+                startRotation * Quaternion.Euler(0f, 0f, rotation);
+
+            yield return null;
+        }
+
+        // Финальное положение.
+        shotgunTransform.position =
+            startPosition + flyDirection * shotgunFlyDistance;
+
+        shotgunTransform.rotation =
+            startRotation * Quaternion.Euler(
+                0f,
+                0f,
+                spinDirection * spinTurns * 360f
+            );
     }
 }

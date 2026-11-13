@@ -1085,15 +1085,17 @@ MonoBehaviour:
   perfectParryDuration: 0.1
   staminaCost: 30
   parryEffectPrefab: {fileID: 754308702497336429, guid: 69b48d4ec3b5e904c9fb3469c807ed1f, type: 3}
+  normalParryEffectPrefab: {fileID: 754308702497336429, guid: 69b48d4ec3b5e904c9fb3469c807ed1f, type: 3}
+  perfectParryEffectPrefab: {fileID: 754308702497336429, guid: 393ef70398589a94bbf9b6bef21b362a, type: 3}
   audioSource: {fileID: 709571606}
   parrySwingSound: {fileID: 8300000, guid: dd75b559646042d4ab2762201f0383c2, type: 3}
   normalParrySound: {fileID: 8300000, guid: 2e341758624d23046aa4cef69291fc46, type: 3}
   perfectParrySound: {fileID: 8300000, guid: 99f8d2454e81da64faa4f582eb257773, type: 3}
   healSound: {fileID: 8300000, guid: 67c56c9c33a445b4698385f2b8f64762, type: 3}
-  swingVolume: 0.7
+  swingVolume: 0.6
   normalVolume: 0.5
   perfectVolume: 0.2
-  healVolume: 0.8
+  healVolume: 0.6
 --- !u!114 &709571600
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3206,13 +3208,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SecurityCamera
   laserSpeed: 10
+  audioSource: {fileID: 1778375882}
+  chargeSound: {fileID: 8300000, guid: f5f4cd58ca1552740b21a72fc080bc5c, type: 3}
+  shotSound: {fileID: 8300000, guid: 8586b2511c5ae3342b41307f666e004d, type: 3}
+  chargeVolume: 0.8
+  shotVolume: 0.65
   startOnAwake: 0
   player: {fileID: 709571598}
   laserPrefab: {fileID: 5001703019719453643, guid: 24acacca3a2d4e746813bba0b4621963, type: 3}
   firePoint: {fileID: 1123146197}
   aimLine: {fileID: 1778375879}
   aimStartColor: {r: 0.4, g: 0, b: 0, a: 0.4}
-  aimEndColor: {r: 0.554717, g: 0, b: 0, a: 1}
+  aimEndColor: {r: 1, g: 0, b: 0, a: 1}
   startAimWidth: 0.025
   endAimWidth: 0.12
   chargeGlow: {fileID: 1967809892}
@@ -3229,7 +3236,7 @@ MonoBehaviour:
   minChargeTime: 0.9
   maxChargeTime: 1.1
   recoveryTime: 1
-  damageEffects: {fileID: 0}
+  damageEffects: {fileID: 1778375881}
   hitColor: {r: 1, g: 1, b: 1, a: 1}
   hitDuration: 0.12
   hitScaleMultiplier: 1.15

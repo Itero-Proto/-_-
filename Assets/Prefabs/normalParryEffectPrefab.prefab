@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 736740027564901101}
   - component: {fileID: 754308702497336429}
   m_Layer: 0
-  m_Name: ParryEffect
+  m_Name: normalParryEffectPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -80,7 +80,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 5
   m_MaskInteraction: 0
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
   m_Color: {r: 0.4867924, g: 0, b: 0.30495837, a: 1}

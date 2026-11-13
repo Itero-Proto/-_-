@@ -119,6 +119,7 @@ public class LevelStatistics : MonoBehaviour
                 : "РАНГ: " + CalculateRank();
     }
 
+
     private string CalculateRank()
     {
         int totalAttempts =
@@ -127,16 +128,16 @@ public class LevelStatistics : MonoBehaviour
         if (totalAttempts == 0)
             return "C";
 
-        if (perfectParries == totalAttempts && damageTaken == 0)
-            return "S";
-
         float successRate =
             (float)(perfectParries + normalParries) / totalAttempts * 100f;
 
-        if (successRate >= 80f && damageTaken <= 1)
+        if (successRate >= 95f && damageTaken <= 1)
+            return "S";
+
+        if (successRate >= 80f && damageTaken <= 2)
             return "A";
 
-        if (successRate >= 60f && damageTaken <= 2)
+        if (successRate >= 60f && damageTaken <= 3)
             return "B";
 
         return "C";

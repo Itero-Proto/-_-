@@ -1,3 +1,4 @@
+
 using System;
 using System.Collections;
 using UnityEngine;
@@ -5,8 +6,19 @@ using UnityEngine;
 public class SecurityCamera : MonoBehaviour
 {
     public Action OnFirstAttackStarted;
+
     [Header("Laser Settings")]
     [SerializeField] private float laserSpeed = 10f;
+
+    [Header("Audio")]
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip chargeSound;
+    [SerializeField] private AudioClip shotSound;
+    [Range(0f, 1f)]
+    [SerializeField] private float chargeVolume = 0.8f;
+    [Range(0f, 1f)]
+    [SerializeField] private float shotVolume = 1f;
+
     [Header("Activation")]
     [SerializeField] private bool startOnAwake = true;
 
@@ -23,6 +35,7 @@ public class SecurityCamera : MonoBehaviour
     [SerializeField] private LineRenderer aimLine;
     [SerializeField] private Color aimStartColor = new Color(0.4f, 0f, 0f, 0.4f);
     [SerializeField] private Color aimEndColor = Color.red;
+
     [Header("Aim Line Width")]
     [SerializeField] private float startAimWidth = 0.025f;
     [SerializeField] private float endAimWidth = 0.2f;
@@ -57,8 +70,10 @@ public class SecurityCamera : MonoBehaviour
 
     private SpriteRenderer spriteRenderer;
     private Color normalColor;
+
     [Header("Damage Effects")]
     [SerializeField] private DamageEffects damageEffects;
+
     [Header("Hit Effect")]
     [SerializeField] private Color hitColor = Color.white;
     [SerializeField] private float hitDuration = 0.12f;
@@ -71,9 +86,18 @@ public class SecurityCamera : MonoBehaviour
     {
         originalPosition = transform.position;
         originalScale = transform.localScale;
+
+        if (audioSource == null)
+            audioSource = GetComponent<AudioSource>();
+
+        if (audioSource == null)
+            Debug.LogWarning(gameObject.name + ": AudioSource не назначен!");
+
         spriteRenderer = GetComponent<SpriteRenderer>();
+
         if (damageEffects == null)
             damageEffects = GetComponentInChildren<DamageEffects>();
+
         if (spriteRenderer != null)
             normalColor = spriteRenderer.color;
 
@@ -118,7 +142,6 @@ public class SecurityCamera : MonoBehaviour
 
     private IEnumerator AttackLoop()
     {
-        // Случайная задержка перед первой атакой.
         float firstDelay = UnityEngine.Random.Range(
             minFirstAttackDelay,
             maxFirstAttackDelay
@@ -133,32 +156,31 @@ public class SecurityCamera : MonoBehaviour
             if (spriteRenderer != null)
                 spriteRenderer.color = Color.red;
 
-            // Каждый раз выбираем новую продолжительность зарядки.
             float currentChargeTime = UnityEngine.Random.Range(
                 minChargeTime,
                 maxChargeTime
             );
 
-            Debug.Log(
-                gameObject.name + ": заряжает лазер! Время зарядки: "
-                + currentChargeTime.ToString("F2") + " сек."
-            );
+            // Звук подготовки к выстрелу.
+            PlaySound(chargeSound, chargeVolume);
 
             yield return StartCoroutine(ChargeAim(currentChargeTime));
 
-            // Прячем линию перед выстрелом.
             if (aimLine != null)
                 aimLine.enabled = false;
 
             if (player != null && laserPrefab != null && firePoint != null)
             {
                 LaserProjectile laser = Instantiate(
-    laserPrefab,
-    firePoint.position,
-    Quaternion.identity
-);
+                    laserPrefab,
+                    firePoint.position,
+                    Quaternion.identity
+                );
 
                 laser.Launch(player.position, laserSpeed);
+
+                // Звук непосредственно в момент выстрела.
+                PlaySound(shotSound, shotVolume);
 
                 PlayRecoil();
 
@@ -170,10 +192,8 @@ public class SecurityCamera : MonoBehaviour
             if (spriteRenderer != null)
                 spriteRenderer.color = normalColor;
 
-            // Восстановление после выстрела.
             yield return new WaitForSeconds(recoveryTime);
 
-            // Случайная пауза перед следующей зарядкой.
             float nextDelay = UnityEngine.Random.Range(
                 minAttackDelay,
                 maxAttackDelay
@@ -182,6 +202,7 @@ public class SecurityCamera : MonoBehaviour
             yield return new WaitForSeconds(nextDelay);
         }
     }
+
     private IEnumerator ChargeAim(float currentChargeTime)
     {
         float timer = 0f;
@@ -194,7 +215,6 @@ public class SecurityCamera : MonoBehaviour
 
             float progress = Mathf.Clamp01(timer / currentChargeTime);
 
-            // Плавно и равномерно увеличиваем толщину луча
             float currentWidth = Mathf.Lerp(
                 startAimWidth,
                 endAimWidth,
@@ -204,7 +224,6 @@ public class SecurityCamera : MonoBehaviour
             aimLine.startWidth = currentWidth;
             aimLine.endWidth = currentWidth;
 
-            // Обновляем направление луча
             aimLine.SetPosition(0, firePoint.position);
             aimLine.SetPosition(1, player.position);
 
@@ -232,6 +251,12 @@ public class SecurityCamera : MonoBehaviour
             originalGlowScale * scale;
     }
 
+    private void PlaySound(AudioClip clip, float volume)
+    {
+        if (audioSource != null && clip != null)
+            audioSource.PlayOneShot(clip, volume);
+    }
+
     private void PlayRecoil()
     {
         if (recoilCoroutine != null)
@@ -245,16 +270,13 @@ public class SecurityCamera : MonoBehaviour
         Vector3 direction = Vector3.zero;
 
         if (player != null)
-        {
             direction = (player.position - transform.position).normalized;
-        }
 
         Vector3 recoilPosition =
             originalPosition - direction * recoilDistance;
 
         float timer = 0f;
 
-        // Быстрая отдача.
         while (timer < recoilDuration)
         {
             timer += Time.deltaTime;
@@ -272,7 +294,6 @@ public class SecurityCamera : MonoBehaviour
 
         timer = 0f;
 
-        // Плавное возвращение.
         while (timer < returnDuration)
         {
             timer += Time.deltaTime;
@@ -293,13 +314,12 @@ public class SecurityCamera : MonoBehaviour
         transform.position = originalPosition;
         recoilCoroutine = null;
     }
+
     public void PlayHitEffect()
     {
-        // Запускаем старые эффекты: вспышку и частицы.
         if (damageEffects != null)
             damageEffects.PlayHit();
 
-        // Дополнительное увеличение камеры.
         if (hitEffectCoroutine != null)
             StopCoroutine(hitEffectCoroutine);
 
@@ -319,7 +339,6 @@ public class SecurityCamera : MonoBehaviour
 
         float timer = 0f;
 
-        // Быстро увеличиваем камеру.
         while (timer < hitDuration)
         {
             timer += Time.deltaTime;
@@ -337,7 +356,6 @@ public class SecurityCamera : MonoBehaviour
 
         timer = 0f;
 
-        // Возвращаем исходный размер.
         while (timer < hitDuration)
         {
             timer += Time.deltaTime;
